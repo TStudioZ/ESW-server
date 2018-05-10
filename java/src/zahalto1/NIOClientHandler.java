@@ -17,7 +17,6 @@ public class NIOClientHandler extends NIOHandler {
 
     private final BufferPool bufferPool;
     private final ByteBuffer readBuffer;
-    //private ByteBuffer writeBuffer = null;
 
     private byte[] bytes;
 
@@ -30,9 +29,7 @@ public class NIOClientHandler extends NIOHandler {
         this.wordsCounter = wordsCounter;
 
         this.bufferPool = bufferPool;
-        //this.readBuffer = ByteBuffer.allocate(BUFFER_CAPACITY);
         this.readBuffer = bufferPool.getByteBuffer();
-        //this.bytes = new byte[BUFFER_CAPACITY];
         this.bytes = bufferPool.getBufferArray();
         this.httpRequest = new HttpRequest(bufferPool.getOutputStreamBuffer());
     }
@@ -81,9 +78,7 @@ public class NIOClientHandler extends NIOHandler {
                 sk.interestOps(SelectionKey.OP_WRITE);
             }
         } else {
-            //readBuffer = writeBuffer;
             readBuffer.clear();
-            //writeBuffer = null;
             sk.interestOps(SelectionKey.OP_READ);
         }
         if (setWriteInterest) {
@@ -93,35 +88,19 @@ public class NIOClientHandler extends NIOHandler {
 
     private boolean processWords(HttpRequest httpRequest) throws IOException {
         GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(httpRequest.getData()));
-        //bufferPool.returnOutputStreamBuffer(httpRequest.getReceived());
+        bufferPool.returnOutputStreamBuffer(httpRequest.getReceived());
         BufferedReader br = new BufferedReader(new InputStreamReader(gis, "UTF-8"));
         Writer sw = new StringWriter();
-        //char[] buffer = new char[8192];
         int readChars = 0;
         char[] buffer = bufferPool.getCharBufferArray();
         while ((readChars = br.read(buffer)) > 0) {
             sw.write(buffer, 0, readChars);
         }
-        bufferPool.returnCharBufferArray(buffer);
+        //bufferPool.returnCharBufferArray(buffer);
         String stringData = sw.toString();
         gis.close();
         br.close();
         sw.close();
-
-        //Matcher m = Pattern.compile("(?U)(\\w+)").matcher(stringData);
-        /*Matcher m = Pattern.compile("(\\S+)").matcher(stringData);
-        String word;
-        while (m.find()) {
-            word = m.group();
-            //System.out.println(word);
-            wordsCounter.addWord(word);
-        }*/
-
-        /*String[] words = stringData.split("\\s+");
-        for (int i = 0; i < words.length; i++) {
-            wordsCounter.addWord(words[i]);
-            //System.out.println(words[i]);
-        }*/
 
         StringTokenizer st = new StringTokenizer(stringData);
         while (st.hasMoreTokens()) {
@@ -170,13 +149,11 @@ public class NIOClientHandler extends NIOHandler {
             }
 
             readBuffer.clear();
-            //writeBuffer = ByteBuffer.allocate(WRITE_BUFFER_CAPACITY);
 
             String httpResponse = HttpHelper.getHttpResponse(statusCode, response);
 
             readBuffer.put(httpResponse.getBytes());
             readBuffer.flip();
-            //readBuffer = null;
 
             write(true);
         } catch (IOException e) {

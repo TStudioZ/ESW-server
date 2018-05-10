@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BufferPool {
 
-    private final int BUFFER_CAPACITY = 16384;
-    private static final int INIT_SIZE = 4;
+    private final int BUFFER_CAPACITY = 8192;
+    private static final int INIT_SIZE = 50;
 
     private ConcurrentLinkedQueue<ByteBuffer> buffers;
     private ConcurrentLinkedQueue<byte[]> bufferArrays;
@@ -73,25 +73,24 @@ public class BufferPool {
     }
 
     public ByteArrayOutputStream getOutputStreamBuffer() {
-        /*ByteArrayOutputStream baos = outputStreamBuffers.peek();
+        ByteArrayOutputStream baos = outputStreamBuffers.poll();
         if (baos == null) {
             baos = new ByteArrayOutputStream();
         }
-        return baos;*/
-        return new ByteArrayOutputStream();
+        return baos;
     }
 
     public void returnBuffer(ByteBuffer buffer) {
         //System.out.println("Buffer returned");
-        buffers.add(buffer);
+        //buffers.add(buffer);
     }
 
     public void returnBufferArray(byte[] bufferArray) {
-        bufferArrays.add(bufferArray);
+        //bufferArrays.add(bufferArray);
     }
 
     public void returnCharBufferArray(char[] charBufferArray) {
-        charBufferArrays.add(charBufferArray);
+        //charBufferArrays.add(charBufferArray);
     }
 
     public void returnOutputStreamBuffer(ByteArrayOutputStream baos) {

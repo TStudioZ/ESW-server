@@ -13,21 +13,23 @@ public class NIOAcceptorHandler extends NIOHandler {
     private int reactorIndex;
 
     private final WordsCounter wordsCounter;
+    private final BufferPool bufferPool;
 
-    static NIOAcceptorHandler newNIOAcceptorHandlerInstance(NIOReactor[] reactors, int port) throws IOException {
+    static NIOAcceptorHandler newNIOAcceptorHandlerInstance(NIOReactor[] reactors, BufferPool bufferPool, int port) throws IOException {
         ServerSocketChannel socketChannel = ServerSocketChannel.open();
         socketChannel.socket().bind(new InetSocketAddress(port));
         socketChannel.configureBlocking(false);
-        return new NIOAcceptorHandler(reactors, socketChannel, SelectionKey.OP_ACCEPT);
+        return new NIOAcceptorHandler(reactors, socketChannel, SelectionKey.OP_ACCEPT, bufferPool);
     }
 
-    private NIOAcceptorHandler(NIOReactor[] reactors, ServerSocketChannel serverSocketChannel, int selectableOps) {
+    private NIOAcceptorHandler(NIOReactor[] reactors, ServerSocketChannel serverSocketChannel, int selectableOps, BufferPool bufferPool) {
         super(serverSocketChannel, selectableOps);
         this.reactors = reactors;
         this.serverSocketChannel = serverSocketChannel;
         this.reactorIndex = 0;
 
         this.wordsCounter = new WordsCounter();
+        this.bufferPool = bufferPool;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class NIOAcceptorHandler extends NIOHandler {
             SocketChannel socketChannel = serverSocketChannel.accept();
             //System.out.println("SocketChannel accepted");
             if (socketChannel != null) {
-                reactors[reactorIndex].register(new NIOClientHandler(socketChannel, wordsCounter));
+                reactors[reactorIndex].register(new NIOClientHandler(socketChannel, wordsCounter, bufferPool));
                 reactorIndex = (reactorIndex + 1) % reactors.length;
             }
         } catch (IOException e) {

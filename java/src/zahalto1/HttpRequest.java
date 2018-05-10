@@ -17,30 +17,26 @@ public class HttpRequest {
 
     private Method method;
     private Command command;
-    //private final ByteArrayInputStream data;
+    private final ByteArrayOutputStream received;
 
-    /*public HttpRequest(Method method, Command command) {
-        this.method = method;
-        this.command = command;
-        this.data = null;
-    }
-
-    public HttpRequest(Method method, Command command, ByteArrayInputStream data) {
-        this.method = method;
-        this.command = command;
-        this.data = data;
-    }*/
-
-    public Method getMethod() {
+    Method getMethod() {
         return method;
     }
 
-    public Command getCommand() {
+    Command getCommand() {
         return command;
+    }
+
+    public ByteArrayOutputStream getReceived() {
+        return received;
     }
 
     public byte[] getData() {
         return received.toByteArray();
+    }
+
+    public HttpRequest(ByteArrayOutputStream buffer) {
+        this.received = buffer;
     }
 
     private static final String NEW_LINE = "\r\n";
@@ -52,13 +48,11 @@ public class HttpRequest {
         if (header.length < 2) {
             error = true;
         }
-        //HttpRequest.Method method = null;
         if (header[0].equalsIgnoreCase("POST")) {
             method = HttpRequest.Method.POST;
         } else if (header[0].equalsIgnoreCase("GET")) {
             method = HttpRequest.Method.GET;
         }
-        //HttpRequest.Command cmd = null;
         if (header[1].equals("/esw/myserver/data")) {
             command = HttpRequest.Command.DATA;
         } else if (header[1].equals("/esw/myserver/count")) {
@@ -75,11 +69,15 @@ public class HttpRequest {
 
         received.reset();
 
-        System.out.println("Header parsed");
+        //System.out.println("Header parsed");
     }
 
-    private ByteArrayOutputStream received = new ByteArrayOutputStream();
     private boolean error = false;
+
+    public boolean isError() {
+        return error;
+    }
+
     private boolean headerParsed = false;
 
     public boolean isHeaderParsed() {

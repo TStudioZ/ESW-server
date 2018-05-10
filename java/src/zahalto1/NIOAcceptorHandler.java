@@ -33,9 +33,9 @@ public class NIOAcceptorHandler extends NIOHandler {
     @Override
     public void run() {
         try {
-            System.out.println("Accepting a SocketChannel...");
+            //System.out.println("Accepting a SocketChannel...");
             SocketChannel socketChannel = serverSocketChannel.accept();
-            System.out.println("SocketChannel accepted");
+            //System.out.println("SocketChannel accepted");
             if (socketChannel != null) {
                 reactors[reactorIndex].register(new NIOClientHandler(socketChannel, wordsCounter));
                 reactorIndex = (reactorIndex + 1) % reactors.length;

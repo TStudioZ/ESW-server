@@ -12,7 +12,8 @@ public class WordsCounter {
     }
 
     public void addWord(String word) {
-        words.merge(word, 1, (oldCount, count) -> oldCount + count);
+        //words.merge(word, 1, (oldCount, count) -> oldCount + count);
+        words.put(word, 1);
     }
 
     public synchronized int getWordCountReset() {

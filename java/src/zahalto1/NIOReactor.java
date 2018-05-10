@@ -26,7 +26,7 @@ public class NIOReactor implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Starting a NIOReactor");
+        //System.out.println("Starting a NIOReactor");
         try {
             while (true) {
                 selector.select();

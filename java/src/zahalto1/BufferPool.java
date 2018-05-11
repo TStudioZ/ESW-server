@@ -21,8 +21,8 @@ public class BufferPool {
         this.outputStreamBuffers = new ConcurrentLinkedQueue<>();
         for (int i = 0; i < INIT_SIZE; i++) {
             allocateBuffer();
-            allocateBufferArray();
-            allocateCharBufferArray();
+            //allocateBufferArray();
+            //allocateCharBufferArray();
             allocateOutputStreamBuffer();
         }
     }
@@ -45,13 +45,13 @@ public class BufferPool {
 
     public ByteBuffer getByteBuffer() {
         //System.out.println("Allocated buffers: " + buffers.size());
-        /*ByteBuffer allocatedBuffer = buffers.poll();
+        ByteBuffer allocatedBuffer = buffers.poll();
         if (allocatedBuffer == null) {
             allocatedBuffer = ByteBuffer.allocate(BUFFER_CAPACITY);
         }
         //System.out.println("Giving a buffer");
-        return allocatedBuffer;*/
-        return ByteBuffer.allocate(BUFFER_CAPACITY);
+        return allocatedBuffer;
+        //return ByteBuffer.allocate(BUFFER_CAPACITY);
     }
 
     public byte[] getBufferArray() {
@@ -82,7 +82,8 @@ public class BufferPool {
 
     public void returnBuffer(ByteBuffer buffer) {
         //System.out.println("Buffer returned");
-        //buffers.add(buffer);
+        buffer.clear();
+        buffers.add(buffer);
     }
 
     public void returnBufferArray(byte[] bufferArray) {

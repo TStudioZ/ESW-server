@@ -35,8 +35,8 @@ public class NIOClientHandler extends NIOHandler {
     }
 
     private void returnBuffers() {
-        /*bufferPool.returnBuffer(readBuffer);
-        bufferPool.returnBufferArray(bytes);*/
+        bufferPool.returnBuffer(readBuffer);
+        //bufferPool.returnBufferArray(bytes);
     }
 
     private void read() throws IOException {

@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BufferPool {
 
-    private final int BUFFER_CAPACITY = 65536;
-    private static final int INIT_SIZE = 50;
+    private final int BUFFER_CAPACITY = 262144;
+    private static final int INIT_SIZE = 75;
 
     private ConcurrentLinkedQueue<ByteBuffer> buffers;
     private ConcurrentLinkedQueue<byte[]> bufferArrays;

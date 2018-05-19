@@ -1,5 +1,5 @@
-#ifndef _WORDSCOUNTER_H_
-#define _WORDSCOUNTER_H_
+#ifndef _WORDS_COUNTER_H_
+#define _WORDS_COUNTER_H_
 
 #include <string>
 #include <vector>
@@ -12,24 +12,6 @@
 #include <memory>
 #include <tbb/concurrent_queue.h>
 #include <tbb/concurrent_unordered_set.h>
-
-class MemoryPool
-{
-private:
-    tbb::concurrent_queue<unsigned char*> arrayBuffers;
-    tbb::concurrent_queue<std::vector<char>*> charBuffers;
-    unsigned char * createArrayBuffer();
-    std::vector<char> * createCharBuffer();
-public:
-    static int ARR_BUF_SIZE;
-
-    MemoryPool();
-    ~MemoryPool();
-    unsigned char * getArrayBuffer();
-    std::vector<char> * getCharBuffer();
-    void returnArrayBuffer(unsigned char*);
-    void returnCharBuffer(std::vector<char> *);
-};
 
 struct CustomHash
 {
@@ -66,4 +48,4 @@ public:
     std::vector<std::future<void>> _futures;
 };
 
-#endif // _WORDSCOUNTER_H_
+#endif // _WORDS_COUNTER_H_

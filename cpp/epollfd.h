@@ -2,7 +2,7 @@
 #define EPOLLFD_H
 
 #include <stdint.h>
-#include "epollinstance.h"
+#include "EpollInstance.h"
 
 class EpollFd
 {
@@ -14,6 +14,7 @@ public:
     void updateFd(uint32_t events);
     int getFd() const { return fd; }
     virtual void handleEvent(uint32_t events) = 0;
+    void printError();
 protected:
     int fd;
     EpollInstance &epollInstance;

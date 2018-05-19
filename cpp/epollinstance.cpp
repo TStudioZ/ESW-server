@@ -2,9 +2,9 @@
 #include <sys/epoll.h>
 #include <cstring>
 #include <stdexcept>
-#include "epollinstance.h"
-#include "epollfd.h"
-#include "epolltcpserver.h"
+#include "EpollInstance.h"
+#include "EpollFd.h"
+#include "EpollTcpServer.h"
 #include <iostream>
 #include <thread>
 #include <future>

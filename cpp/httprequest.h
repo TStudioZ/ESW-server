@@ -3,7 +3,8 @@
 
 #include <vector>
 #include <sstream>
-#include "wordscounter.h"
+#include "WordsCounter.h"
+#include "MemoryPool.h"
 
 enum class Method
 {

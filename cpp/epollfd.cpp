@@ -1,4 +1,6 @@
-#include "epollfd.h"
+#include "EpollFd.h"
+#include <iostream>
+#include <cstring>
 
 EpollFd::EpollFd(int fd, EpollInstance &e)
     : fd(fd), epollInstance(e)
@@ -22,4 +24,9 @@ void EpollFd::unregisterFd()
 void EpollFd::updateFd(uint32_t events)
 {
      epollInstance.updateFd(*this, events);
+}
+
+void EpollFd::printError()
+{
+    std::cerr << "Error: " << std::strerror(errno) << std::endl;
 }

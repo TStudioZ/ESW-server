@@ -2,8 +2,10 @@
 #include <sys/epoll.h>
 #include <sys/timerfd.h>
 #include <future>
-#include "epollinstance.h"
-#include "epolltcpserver.h"
+#include "EpollInstance.h"
+#include "EpollTcpServer.h"
+#include "WordsCounter.h"
+#include "MemoryPool.h"
 
 using namespace std;
 

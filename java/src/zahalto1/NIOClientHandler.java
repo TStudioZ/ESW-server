@@ -84,7 +84,7 @@ public class NIOClientHandler extends NIOHandler {
     }
 
     private boolean processWords(HttpRequest httpRequest) throws IOException {
-        GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(httpRequest.getData()));
+        GZIPInputStream gis = new GZIPInputStream(new BufferedInputStream(new ByteArrayInputStream(httpRequest.getData())));
         bufferPool.returnOutputStreamBuffer(httpRequest.getReceived());
         BufferedReader br = new BufferedReader(new InputStreamReader(gis));
         Writer sw = new StringWriter();

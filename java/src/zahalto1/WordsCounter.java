@@ -9,7 +9,7 @@ public class WordsCounter {
 
     public WordsCounter() {
         //this.words = new ConcurrentHashMap<>();
-        this.wordsSet = ConcurrentHashMap.newKeySet(300000);
+        this.wordsSet = ConcurrentHashMap.newKeySet(500000);
     }
 
     public void addWord(String word) {

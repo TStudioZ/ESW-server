@@ -9,9 +9,6 @@ import java.util.zip.GZIPInputStream;
 
 public class NIOClientHandler extends NIOHandler {
 
-    private final int BUFFER_CAPACITY = 65536;
-    private final int WRITE_BUFFER_CAPACITY = 256;
-
     private final SocketChannel socketChannel;
     private final WordsCounter wordsCounter;
 
@@ -89,7 +86,7 @@ public class NIOClientHandler extends NIOHandler {
     private boolean processWords(HttpRequest httpRequest) throws IOException {
         GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(httpRequest.getData()));
         bufferPool.returnOutputStreamBuffer(httpRequest.getReceived());
-        BufferedReader br = new BufferedReader(new InputStreamReader(gis, "UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(gis));
         Writer sw = new StringWriter();
         int readChars = 0;
         char[] buffer = bufferPool.getCharBufferArray();

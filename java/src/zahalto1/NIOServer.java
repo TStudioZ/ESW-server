@@ -8,7 +8,7 @@ public class NIOServer {
 
     private final static BufferPool bufferPool;
     private final static NIOReactor[] reactors;
-    static ExecutorService executorService = Executors.newWorkStealingPool();
+    static ExecutorService executorService = Executors.newCachedThreadPool();
 
     static {
         bufferPool = new BufferPool();

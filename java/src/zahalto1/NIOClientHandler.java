@@ -1,5 +1,7 @@
 package zahalto1;
 
+import sun.misc.IOUtils;
+
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -84,9 +86,10 @@ public class NIOClientHandler extends NIOHandler {
     }
 
     private boolean processWords(HttpRequest httpRequest) throws IOException {
-        GZIPInputStream gis = new GZIPInputStream(new BufferedInputStream(new ByteArrayInputStream(httpRequest.getData())));
+        GZIPInputStream gis = new GZIPInputStream(new BufferedInputStream(
+                new ByteArrayInputStream(httpRequest.getData())), BufferPool.BUFFER_CAPACITY);
         bufferPool.returnOutputStreamBuffer(httpRequest.getReceived());
-        BufferedReader br = new BufferedReader(new InputStreamReader(gis));
+        /*BufferedReader br = new BufferedReader(new InputStreamReader(gis, "UTF-8"));
         Writer sw = new StringWriter();
         int readChars = 0;
         char[] buffer = bufferPool.getCharBufferArray();
@@ -94,10 +97,13 @@ public class NIOClientHandler extends NIOHandler {
             sw.write(buffer, 0, readChars);
         }
         //bufferPool.returnCharBufferArray(buffer);
-        String stringData = sw.toString();
+        String stringData = sw.toString();*/
+
+        String stringData = new String(IOUtils.readFully(gis, -1, true));
+
         gis.close();
-        br.close();
-        sw.close();
+        //br.close();
+        //sw.close();
 
         StringTokenizer st = new StringTokenizer(stringData);
         while (st.hasMoreTokens()) {

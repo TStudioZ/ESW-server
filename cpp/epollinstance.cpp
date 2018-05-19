@@ -1,14 +1,11 @@
+#include "EpollInstance.h"
+#include "EpollFd.h"
+
 #include <unistd.h>
 #include <sys/epoll.h>
 #include <cstring>
 #include <stdexcept>
-#include "EpollInstance.h"
-#include "EpollFd.h"
-#include "EpollTcpServer.h"
 #include <iostream>
-#include <thread>
-#include <future>
-#include <functional>
 
 using namespace std;
 
@@ -34,7 +31,6 @@ void EpollInstance::registerFd(EpollFd &fd, uint32_t events)
     ev.events = events;
     ev.data.ptr = &fd;
 
-    lock_guard<mutex> lock(_mutex);
     if (epoll_ctl(epollFd, EPOLL_CTL_ADD, fd.fd, &ev) == -1)
     {
         throw std::runtime_error(std::string("Register epoll_ctl: ") + std::strerror(errno));
@@ -49,7 +45,6 @@ void EpollInstance::unregisterFd(EpollFd &fd)
     ev.events = 0;
     ev.data.ptr = &fd;
 
-    lock_guard<mutex> lock(_mutex);
     if (epoll_ctl(epollFd, EPOLL_CTL_DEL, fd.fd, &ev) == -1)
     {
         throw std::runtime_error(std::string("Unregister epoll_ctl: ") + std::strerror(errno));
@@ -64,7 +59,6 @@ void EpollInstance::updateFd(EpollFd & fd, uint32_t events)
     ev.events = events;
     ev.data.ptr = &fd;
 
-    lock_guard<mutex> lock(_mutex);
     if (epoll_ctl(epollFd, EPOLL_CTL_MOD, fd.fd, &ev) == -1)
     {
         throw std::runtime_error(std::string("Update epoll_ctl: ") + std::strerror(errno));
@@ -95,12 +89,6 @@ void EpollInstance::waitAndHandleEvents()
         {
             EpollFd *fd = static_cast<EpollFd*>(events[i].data.ptr);
             fd->handleEvent(events[i].events);
-
-            // std::packaged_task<void()> t([=] () {
-            //     cout << "Processing event..." << endl;
-            //     fd->handleEvent(events[i].events);
-            // });
-            // EpollTcpServer::pool.post(t);
         }
     }
 }

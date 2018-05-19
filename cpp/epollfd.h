@@ -1,7 +1,6 @@
 #ifndef EPOLLFD_H
 #define EPOLLFD_H
 
-#include <stdint.h>
 #include "EpollInstance.h"
 
 class EpollFd

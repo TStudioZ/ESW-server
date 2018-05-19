@@ -1,7 +1,7 @@
 #ifndef EPOLLINSTANCE_H
 #define EPOLLINSTANCE_H
 
-#include <mutex>
+#include <stdint.h>
 
 #define EPOLL_MAX_EVENTS 64
 
@@ -9,8 +9,6 @@ class EpollFd;
 
 class EpollInstance
 {
-private:
-    std::mutex _mutex;
 public:
     EpollInstance();
     ~EpollInstance();

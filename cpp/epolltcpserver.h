@@ -4,12 +4,6 @@
 #include "EpollFd.h"
 #include "HttpRequest.h"
 #include "WordsCounter.h"
-#include <string>
-#include <thread_pool.hpp>
-#include <thread>
-#include <future>
-#include <functional>
-#include <memory>
 
 class EpollTcpServer : public EpollFd
 {

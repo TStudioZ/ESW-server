@@ -4,12 +4,9 @@
 #include "EpollFd.h"
 #include "HttpRequest.h"
 #include "WordsCounter.h"
+
 #include <string>
 #include <thread_pool.hpp>
-#include <thread>
-#include <future>
-#include <functional>
-#include <memory>
 
 class TcpConnection : public EpollFd
 {
@@ -31,18 +28,6 @@ private:
     bool readData();
     bool writeData();
     void closeConnection();
-};
-
-class WordsProcessor
-{
-private:
-    HttpRequest * httpRequest;
-    MemoryPool & memoryPool;
-    WordsCounter & wordsCounter;
-public:
-    WordsProcessor(HttpRequest*, MemoryPool&, WordsCounter&);
-    ~WordsProcessor();
-    void processWords();
 };
 
 #endif // _TCP_CONNECTION_H_

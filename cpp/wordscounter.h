@@ -9,7 +9,6 @@
 #include <thread>
 #include <future>
 #include <functional>
-#include <memory>
 #include <tbb/concurrent_queue.h>
 #include <tbb/concurrent_unordered_set.h>
 

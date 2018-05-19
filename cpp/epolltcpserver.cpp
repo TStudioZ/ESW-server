@@ -5,16 +5,6 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 #include <iostream>
-#include <cstring>
-#include <cctype>
-#include <sstream>
-#include <vector>
-#include <iterator>
-#include <ctime>
-#include <chrono>
-#include <boost/iostreams/filtering_stream.hpp>
-#include <boost/iostreams/filter/gzip.hpp>
-#include <boost/iostreams/copy.hpp>
 
 #include "EpollTcpServer.h"
 #include "TcpConnection.h"

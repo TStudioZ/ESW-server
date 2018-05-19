@@ -1,10 +1,11 @@
-#ifndef HTTPREQUEST_H
-#define HTTPREQUEST_H
+#ifndef _HTTP_REQUEST_H_
+#define _HTTP_REQUEST_H_
+
+#include "WordsCounter.h"
+#include "MemoryPool.h"
 
 #include <vector>
 #include <sstream>
-#include "WordsCounter.h"
-#include "MemoryPool.h"
 
 enum class Method
 {
@@ -56,4 +57,4 @@ public:
     static std::string getResponse(const std::string &, const std::string &);
 };
 
-#endif // HTTPREQUEST_H
+#endif // _HTTP_REQUEST_H_

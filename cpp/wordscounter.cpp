@@ -1,4 +1,5 @@
 #include "WordsCounter.h"
+
 #include <iostream>
 
 using namespace std;

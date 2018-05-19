@@ -5,10 +5,6 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-#include <mutex>
-#include <thread>
-#include <future>
-#include <functional>
 #include <memory>
 #include <tbb/concurrent_queue.h>
 #include <tbb/concurrent_unordered_set.h>

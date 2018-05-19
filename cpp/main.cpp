@@ -1,15 +1,13 @@
-#include <iostream>
-#include <sys/epoll.h>
-#include <sys/timerfd.h>
-#include <future>
 #include "EpollInstance.h"
 #include "EpollTcpServer.h"
 #include "WordsCounter.h"
 #include "MemoryPool.h"
 
-using namespace std;
+#include <iostream>
+#include <sys/epoll.h>
+#include <sys/timerfd.h>
 
-#define EPOLL_INSTANCES 1
+using namespace std;
 
 int main(int argc, char *argv[])
 {
@@ -30,19 +28,6 @@ int main(int argc, char *argv[])
     WordsCounter wordsCounter;
     EpollTcpServer server(port, ep, memoryPool, wordsCounter);
     ep.waitAndHandleEvents();
-
-    // std::future<void> futures[EPOLL_INSTANCES];
-    // for (int i = 0; i < EPOLL_INSTANCES; i++)
-    // {
-    //     std::packaged_task<void()> t(bind(&EpollInstance::waitAndHandleEvents, &ep));
-    //     futures[i] = t.get_future();
-    //     EpollTcpServer::pool.post(t);
-    // }
-
-    // for (int i = 0; i < EPOLL_INSTANCES; i++)
-    // {
-    //     futures[i].get();
-    // }
 
     return 0;
 }

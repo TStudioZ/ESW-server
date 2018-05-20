@@ -12,7 +12,7 @@ public class NIOServer {
 
     static {
         bufferPool = new BufferPool();
-        reactors = new NIOReactor[16];
+        reactors = new NIOReactor[32];
         try {
             for (int i = 0; i < reactors.length; i++) {
                 reactors[i] = new NIOReactor();

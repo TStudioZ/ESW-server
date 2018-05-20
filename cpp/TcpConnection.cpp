@@ -50,12 +50,10 @@ void TcpConnection::handleEvent(uint32_t events)
 {
     if (events & EPOLLERR)
     {
-        //cout << "Closing on error..." << endl;
         closeConnection();
     }
     else if (events & EPOLLIN)
     {
-        //cout << "Reading..." << endl;
         if (!readData())
         {
             closeConnection();
@@ -63,7 +61,6 @@ void TcpConnection::handleEvent(uint32_t events)
     }
     else if (events & EPOLLOUT)
     {
-        //cout << "Writing..." << endl;
         if (!writeData())
         {
             closeConnection();
@@ -71,14 +68,12 @@ void TcpConnection::handleEvent(uint32_t events)
     }
     else
     {
-        //cout << "Closing..." << endl;
         closeConnection();
     }
 }
 
 bool TcpConnection::processRequest()
 {
-    //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     httpRequest->print();
 
     const Command & command = httpRequest->getCommand();
@@ -88,8 +83,6 @@ bool TcpConnection::processRequest()
     {
         if (method == Method::POST && command == Command::DATA)
         {
-            //cout << "Processing POST DATA..." << endl;
-
             WordsProcessor * wordsProcessor = new WordsProcessor(httpRequest, memoryPool, wordsCounter);
             std::packaged_task<void()> t(bind(&WordsProcessor::processWords, wordsProcessor));
             wordsCounter._futures.push_back(t.get_future());
@@ -100,16 +93,13 @@ bool TcpConnection::processRequest()
         }
         else if (method == Method::GET && command == Command::COUNT)
         {
-            //cout << "Processing GET COUNT..." << endl;
-
             for_each(wordsCounter._futures.begin(), wordsCounter._futures.end(), [](std::future<void> & f) {
                 f.get();
             });
             wordsCounter._futures.clear();
 
             statusCode = HttpRequest::HTTP_OK;
-            //response = "0";
-            response = to_string(wordsCounter.getWordCount3());
+            response = to_string(wordsCounter.getWordCount());
 
             delete httpRequest;
         }
@@ -130,7 +120,6 @@ bool TcpConnection::processRequest()
     }
 
     updateFd(EPOLLOUT);
-    //writeData();
     return true;
 }
 
@@ -143,7 +132,6 @@ bool TcpConnection::readData()
         readCount = read(fd, buffer, MemoryPool::ARR_BUF_SIZE);
         if (readCount == 0)
         {
-            //std::cout << "End of message" << std::endl;
             return false;
         }
         if (readCount == -1)
@@ -152,11 +140,7 @@ bool TcpConnection::readData()
             {
                 if (httpRequest->isDataParsed())
                 {
-                    //std::packaged_task<bool()> t(processRequest);
-                    //std::packaged_task<bool()> t(bind(&TcpConnection::processRequest, this));
-                    //EpollTcpServer::pool.post(t);
                     return processRequest();
-                    //thread t(bind(&TcpConnection::processRequest, this));
                 }
                 else
                 {
@@ -173,7 +157,6 @@ bool TcpConnection::readData()
 
         if (readCount > 0)
         {
-            //std::cout << "Receive count: " << readCount << std::endl;
             httpRequest->addData(buffer, readCount);
         }
     }
@@ -182,23 +165,17 @@ bool TcpConnection::readData()
 bool TcpConnection::writeData()
 {
     std::string out = HttpRequest::getResponse(statusCode, response);
-    //cout << out;
     int writeCount = write(fd, out.c_str(), out.length());
-    //cout << "Response length: " << out.size() << ", written count: " << writeCount << endl;
     if (writeCount == -1)
     {
         printError();
         return false;
     }
-
-    //updateFd(EPOLLIN | EPOLLET);
-    //return true;
     return false;
 }
 
 void TcpConnection::closeConnection()
 {
-    //std::cout << "Unregistering connection" << std::endl;
     unregisterFd();
     if (close(fd) == -1)
     {

@@ -26,15 +26,11 @@ void HttpRequest::print()
 
 void HttpRequest::parseHeader()
 {
-    //cout << "Header parsed" << endl;
-    //cout << "Data size: " << received.size() << endl;
     stringstream ss;
     for (auto it = received.begin(); it != received.end(); it++)
     {
-        //cout << (char) *it;
         ss << *it;
     }
-    //cout << endl;
 
     string line, temp, temp2, temp3;
     getline(ss, line);
@@ -45,12 +41,10 @@ void HttpRequest::parseHeader()
     if (temp == "POST")
     {
         method = Method::POST;
-        //cout << "method POST" << endl;
     }
     else if (temp == "GET")
     {
         method = Method::GET;
-        //cout << "method GET" << endl;
     }
 
     // path
@@ -58,12 +52,10 @@ void HttpRequest::parseHeader()
     if (temp == "/esw/myserver/data")
     {
         command = Command::DATA;
-        //cout << "command DATA" << endl;
     }
     else if (temp == "/esw/myserver/count")
     {
         command = Command::COUNT;
-        //cout << "command COUNT" << endl;
     }
 
     while (getline(ss, temp, '\n'))
@@ -77,7 +69,6 @@ void HttpRequest::parseHeader()
             break;
         }
     }
-    //cout << "Content size: " << contentSize << endl;
 
     received.clear();
 }
@@ -93,7 +84,6 @@ void HttpRequest::addData(unsigned char * data, int len)
         if (readBytes == 0) 
         {
             prev1 = data[index++];
-            //received << prev1;
             received.push_back(prev1);
             readBytes++;
             if (index >= len)
@@ -102,7 +92,6 @@ void HttpRequest::addData(unsigned char * data, int len)
         if (readBytes == 1) 
         {
             prev2 = data[index++];
-            //received << prev2;
             received.push_back(prev2);
             readBytes++;
             if (index >= len)
@@ -111,7 +100,6 @@ void HttpRequest::addData(unsigned char * data, int len)
         if (readBytes == 2) 
         {
             curr1 = data[index++];
-            //received << curr1;
             received.push_back(curr1);
             readBytes++;
             if (index >= len)
@@ -121,14 +109,11 @@ void HttpRequest::addData(unsigned char * data, int len)
         for (; index < len; index++, readBytes++)
         {
             curr2 = data[index];
-            //received << curr2;
             received.push_back(curr2);
             if (curr1 == 0x0d && curr2 == 0x0a
                     && prev1 == 0x0d && prev2 == 0x0a)
             {
                 dataOffset = readBytes + 1;
-                //cout << "Read bytes: " << readBytes << endl;
-                //cout << "Data offset: " << dataOffset << endl;
                 index++;
                 parseHeader();
                 headerParsed = true;
@@ -142,16 +127,10 @@ void HttpRequest::addData(unsigned char * data, int len)
 
     if (headerParsed)
     {
-        //copy(data + index, data + len, back_inserter(received));
         copy(data + index, data + len, back_inserter(*receivedString));
-        //received.write(data + index, len - index);
         readBytes += len;
-        //cout << "Content size: " << contentSize << endl;
-        //cout << "Read bytes: " << readBytes << endl;
-        //cout << "Data offset: " << dataOffset << endl;
         if (readBytes - dataOffset >= contentSize) 
         {
-            //cout << "Data parsed" << endl;
             dataParsed = true;
         }
     }

@@ -71,13 +71,9 @@ void EpollInstance::waitAndHandleEvents()
 
     struct epoll_event events[EPOLL_MAX_EVENTS];
     int i, n;
-    //cout << "Event handler started" << endl;
     while (1)
     { 
-        //cout << "Waiting for an event..." << endl;
         n = epoll_wait(epollFd, events, EPOLL_MAX_EVENTS, -1);
-        //cout << "Event received" << endl;
-        //cout << "Epoll event count: " << n << endl;
 
         if (n < 0)
         {

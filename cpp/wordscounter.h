@@ -28,22 +28,10 @@ private:
     std::unordered_set<size_t> wordsMap2;
     tbb::concurrent_unordered_set<size_t, CustomHash> wordsSet;
 public:
-    WordsCounter() : wordsSet(300000)
-    {
-        //wordsSet = new tbb::concurrent_unordered_set<size_t, decltype(_hashFun)>(100, _hashFun);
-    }
-    ~WordsCounter()
-    {
-        //delete wordsSet;
-    }
-    void addWord(std::string &);
-    void addWord2(size_t &);
-    void addWord3(size_t);
-    void addWords(std::vector<std::string> &);
-    void addWords2(std::vector<size_t> &);
+    WordsCounter();
+    ~WordsCounter();
+    void addWord(size_t);
     unsigned int getWordCount();
-    unsigned int getWordCount2();
-    unsigned int getWordCount3();
     std::vector<std::future<void>> _futures;
 };
 

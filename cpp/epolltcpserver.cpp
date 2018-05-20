@@ -27,8 +27,6 @@ EpollTcpServer::EpollTcpServer(uint32_t p, EpollInstance &e, MemoryPool & mp, Wo
 
 EpollTcpServer::~EpollTcpServer()
 {
-    //delete[] eps;
-
     if (serverStarted)
     {
         unregisterFd();
@@ -39,7 +37,6 @@ void EpollTcpServer::handleEvent(uint32_t events)
 {
     if (events & EPOLLERR)
     {
-        //cout << "Unregistering server fd..." << endl;
         unregisterFd();
     }
     else if (events & EPOLLIN)
@@ -54,7 +51,6 @@ void EpollTcpServer::handleEvent(uint32_t events)
 
 bool EpollTcpServer::startServer()
 {
-    //std::cout << "Starting server on port: " << port << std::endl;
     fd = socket(AF_INET, SOCK_STREAM, 0);
     if (fd == -1)
     {
@@ -102,7 +98,6 @@ bool EpollTcpServer::startServer()
 
 void EpollTcpServer::acceptConnection()
 {
-    //cout << "Accepting connection...";
     int cfd = accept(fd, NULL, NULL);
     if (cfd == -1)
     {
@@ -110,6 +105,4 @@ void EpollTcpServer::acceptConnection()
         return;
     }
     new TcpConnection(cfd, epollInstance, memoryPool, wordsCounter);
-    //rr = (rr + 1) % EpollTcpServer::HANDLERS_COUNT;
-    //std::cout << "Connection established" << std::endl;
 }

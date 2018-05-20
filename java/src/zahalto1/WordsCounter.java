@@ -4,8 +4,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class WordsCounter {
 
+    private static final int MAPS_COUNT = 32;
+
     private final ConcurrentHashMap.KeySetView<String, Boolean>[] wordSets
-            = new ConcurrentHashMap.KeySetView[100];
+            = new ConcurrentHashMap.KeySetView[MAPS_COUNT];
 
     public WordsCounter() {
         for (int i = 0; i < wordSets.length; i++) {
@@ -14,7 +16,7 @@ public class WordsCounter {
     }
 
     public void addWord(String word) {
-        int index = word.length() - 1;
+        int index = (word.length() - 1) % MAPS_COUNT;
         if (!wordSets[index].contains(word))
             wordSets[index].add(word);
     }

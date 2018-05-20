@@ -21,7 +21,10 @@ public class NIOClientHandler extends NIOHandler {
 
     private final HttpRequest httpRequest;
 
-    NIOClientHandler(SocketChannel socketChannel, WordsCounter wordsCounter, BufferPool bufferPool) throws IOException {
+    NIOClientHandler(SocketChannel socketChannel,
+                     WordsCounter wordsCounter,
+                     BufferPool bufferPool)
+            throws IOException {
         super(socketChannel, SelectionKey.OP_READ);
         this.socketChannel = socketChannel;
         this.socketChannel.configureBlocking(false);
@@ -103,10 +106,10 @@ public class NIOClientHandler extends NIOHandler {
             if (command != null && method != null && !httpRequest.isError()) {
                 if (method == HttpRequest.Method.POST && command == HttpRequest.Command.DATA) {
                     try {
-                        long timeStart = System.currentTimeMillis();
+                        //long timeStart = System.currentTimeMillis();
                         processWords(httpRequest);
-                        long timeNow = System.currentTimeMillis();
-                        System.out.println("Processing time (ms): " + (timeNow - timeStart));
+                        //long timeNow = System.currentTimeMillis();
+                        //System.out.println("Processing time (ms): " + (timeNow - timeStart));
                         statusCode = HttpHelper.HTTP_NO_CONTENT;
                         response = "OK";
                     } catch (IOException e) {

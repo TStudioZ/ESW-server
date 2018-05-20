@@ -68,8 +68,6 @@ public class HttpRequest {
         }
 
         received.reset();
-
-        //System.out.println("Header parsed");
     }
 
     private boolean error = false;

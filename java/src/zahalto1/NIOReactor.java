@@ -15,7 +15,6 @@ public class NIOReactor implements Runnable {
         this.handlersToRegister = new ConcurrentLinkedQueue<>();
 
         Thread t = new Thread(this);
-        //t.setDaemon(true);
         t.start();
     }
 
@@ -26,7 +25,6 @@ public class NIOReactor implements Runnable {
 
     @Override
     public void run() {
-        //System.out.println("Starting a NIOReactor");
         try {
             while (true) {
                 selector.select();

@@ -35,12 +35,9 @@ public class NIOClientHandler extends NIOHandler {
 
     private void returnBuffers() {
         bufferPool.returnBuffer(readBuffer);
-        //bufferPool.returnBufferArray(bytes);
     }
 
     private void read() throws IOException {
-        //System.out.println("NIOClientHandler reading");
-
         int readBytes;
         while ((readBytes = socketChannel.read(readBuffer)) > 0) {
             readBuffer.flip();
@@ -50,14 +47,11 @@ public class NIOClientHandler extends NIOHandler {
         }
 
         SelectionKey sk = getSelectionKey();
-        //System.out.println("NIOClientHandler read bytes: " + readBytes);
         if (readBytes == -1) {
-            //System.out.println("Closing connection");
             returnBuffers();
             sk.cancel();
             socketChannel.close();
         } else if (httpRequest.isDataParsed()) {
-            //System.out.println("Data received");
             sk.interestOps(0);
             sk.selector().wakeup();
 
@@ -66,7 +60,6 @@ public class NIOClientHandler extends NIOHandler {
     }
 
     private void write(boolean setWriteInterest) throws IOException {
-        //System.out.println("NIOClientHandler writing");
         SelectionKey sk = getSelectionKey();
         if (socketChannel.write(readBuffer) == -1) {
             returnBuffers();
@@ -89,21 +82,10 @@ public class NIOClientHandler extends NIOHandler {
         GZIPInputStream gis = new GZIPInputStream(new BufferedInputStream(
                 new ByteArrayInputStream(httpRequest.getData())), BufferPool.BUFFER_CAPACITY);
         bufferPool.returnOutputStreamBuffer(httpRequest.getReceived());
-        /*BufferedReader br = new BufferedReader(new InputStreamReader(gis, "UTF-8"));
-        Writer sw = new StringWriter();
-        int readChars = 0;
-        char[] buffer = bufferPool.getCharBufferArray();
-        while ((readChars = br.read(buffer)) > 0) {
-            sw.write(buffer, 0, readChars);
-        }
-        //bufferPool.returnCharBufferArray(buffer);
-        String stringData = sw.toString();*/
 
         String stringData = new String(IOUtils.readFully(gis, -1, true));
 
         gis.close();
-        //br.close();
-        //sw.close();
 
         StringTokenizer st = new StringTokenizer(stringData);
         while (st.hasMoreTokens()) {
@@ -113,7 +95,6 @@ public class NIOClientHandler extends NIOHandler {
     }
 
     private void process() {
-        //System.out.println("NIOClientHandler processing");
         try {
             String statusCode = null;
             String response = null;
@@ -128,8 +109,6 @@ public class NIOClientHandler extends NIOHandler {
                         System.out.println("Processing time (ms): " + (timeNow - timeStart));
                         statusCode = HttpHelper.HTTP_NO_CONTENT;
                         response = "OK";
-
-                        //System.out.println("POST data");
                     } catch (IOException e) {
                         System.out.println("Error processing data");
                         e.printStackTrace();
@@ -140,8 +119,6 @@ public class NIOClientHandler extends NIOHandler {
 
                     statusCode = HttpHelper.HTTP_OK;
                     response = "" + wordCount;
-
-                    //System.out.println("GET count (" + wordCount + ")");
                 } else {
                     statusCode = HttpHelper.HTTP_BAD_REQUEST;
                     response = "Unknown command";

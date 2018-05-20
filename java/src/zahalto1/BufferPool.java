@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class BufferPool {
 
     public static final int BUFFER_CAPACITY = 262144;
-    private static final int INIT_SIZE = 75;
+    private static final int INIT_SIZE = 32;
 
     private ConcurrentLinkedQueue<ByteBuffer> buffers;
     private ConcurrentLinkedQueue<ByteArrayOutputStream> outputStreamBuffers;
@@ -39,10 +39,6 @@ public class BufferPool {
 
     public byte[] getBufferArray() {
         return new byte[BUFFER_CAPACITY];
-    }
-
-    public char[] getCharBufferArray() {
-        return new char[BUFFER_CAPACITY];
     }
 
     public ByteArrayOutputStream getOutputStreamBuffer() {
